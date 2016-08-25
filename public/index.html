@@ -3,33 +3,23 @@
 
 <head>
 	<meta charset='UTF-8' />
-	<title>DogFight.io</title>
+	<title>TACTICAL</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
 </head>
-
-
 <body id="app">
-<div class="connexion" v-if="!connected">
-	<h1>DogFight.io</h1>
-	<form v-on:submit.prevent="connection">
-		<input type="text" v-model="pseudo" maxlength="20">
-		<input type="submit" value="Play">
-	</form>
-</div>
-<div id="webgl"></div>	
 
-<script src="./js/lib/jquery-2.2.4.min.js"></script>
-<script src="./js/lib/vue.min.js"></script>
-<script src="./js/lib/socket.io-1.4.5.js"></script>
-<script src="./js/lib/three.min.js"></script>
-<script src="./js/lib/OBJLoader.js"></script>
-<script src="./js/lib/SeededRandom.js"></script>
+	<button @click="matchmaking()">MatchMaking</button>
 
-<script src="./js/Client.js"></script>
-<script src="./js/Display.js"></script>
-<script src="./js/Room.js"></script>
-<script src="./js/Map.js"></script>
-<script src="./js/Player.js"></script>
-<script src="./js/main.js"></script>
-<script src="./js/socket.js"></script>
+	<script src="./js/lib/jquery-2.2.4.min.js"></script>
+	<script src="./js/lib/vue.min.js"></script>
+	<script src="./js/lib/socket.io-1.4.5.js"></script>
+	<script src="./js/lib/SeededRandom.js"></script>
+
+	<script src="./js/Client.js"></script>
+	<script src="./js/Display.js"></script>
+	<script src="./js/Room.js"></script>
+	<script src="./js/Map.js"></script>
+	<script src="./js/Player.js"></script>
+	<script src="./js/main.js"></script>
+	<script src="./js/socket.js"></script>
 </body>

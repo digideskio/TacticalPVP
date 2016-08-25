@@ -1,10 +1,8 @@
 var SeededRandom = function(seed){
     this.seed = seed;
-    console.log("xD");
 }
 
 SeededRandom.prototype.next = function(){
-	console.log("prout");
     if(this.seed == null || this.seed == undefined){
         this.seed = Date.now();
     }

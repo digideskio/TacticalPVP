@@ -5,19 +5,19 @@ var Player = function(json){
 
 	this.room;
 
-	this.x = 0;
-	this.y = 0;
+	this.x = -1;
+	this.y = -1;
 
 	this.fighting = false;
+
+	this.team = 0;
 
 	this.characteristics = {
 		life:0,
 		erodedlife:0,
 		maxlife:0,
 		AP:0,
-		maxAP:0,
 		MP:0,
-		maxMP:0,
 		range:0,
 		initiative:0,
 		cs:0,
@@ -56,10 +56,6 @@ Player.prototype.init = function(json){
 	for(var i in json){
 		this[i] = json[i];
 	}
-}
-
-Player.prototype.update = function(){
-	
 }
 
 Player.prototype.updateCharacteristics = function(){
@@ -139,5 +135,43 @@ Player.prototype.removeItem = function(item){
 		if(this.items[i].id == item.id){
 			this.items.splice(i, 1);
 		}
+	}
+}
+
+Player.prototype.getPublicInformations = function(){
+	return {
+		id:this.id,
+		pseudo:this.pseudo,	
+		x:this.x,
+		y:this.y,
+		team:this.team,
+		spells:this.spells,
+		characteristics:{
+			life:this.characteristics.life,
+			maxlife:this.characteristics.maxlife,
+			erodedlife:this.characteristics.erodedlife,
+			AP:this.characteristics.AP,
+			MP:this.characteristics.MP,
+			wisdom:this.characteristics.wisdom,
+			tackle:this.characteristics.tackle,
+			resmagic:this.characteristics.resmagic,
+			resphysic:this.characteristics.resphysic,
+			resdommagic:this.characteristics.resdommagic,
+			resdomphysic:this.characteristics.resdomphysic
+		},
+		buffs:this.buffs
+	}
+}
+
+Player.prototype.getAllInformations = function(){
+	return {
+		id:this.id,
+		pseudo:this.pseudo,	
+		x:this.x,
+		y:this.y,
+		team:this.team,
+		spells:this.spells,
+		characteristics:this.characteristics,
+		buffs:this.buffs
 	}
 }

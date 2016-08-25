@@ -4,9 +4,6 @@ io.on('connection', function(socket){
 	socket.emit("nbPlayers", game.nbPlayers());
 
 	socket.on("login", function(data){
-		if(game.getPlayerBySocket(socket.id) != null){
-			return;
-		}
 		var id = playerIdGenerator.get();
 		var player = new Player({
 			id:id,
@@ -16,25 +13,34 @@ io.on('connection', function(socket){
 
 		socket.emit("playerID", id);
 		game.addPlayer(player);
-
-		var room = game.getAccessibleRoom();
-		room.addPlayer(player);
 	});
 
-	socket.on("respawn", function(data){
+	socket.on("matchmaking", function(){
+		var player = game.getPlayerBySocket(socket.id);
+		if(!player){
+			return;
+		}
 
+		if(player.fighting){
+			socket.emit({error:"Already in fight."});
+			return;
+		}
+
+		var res = game.matchmaking.addPlayer(player);
+		if(res){
+			socket.emit({success:"In queue."});
+		}else{
+			socket.emit({success:"Already in queue."});
+		}
 	});
 
-	socket.on("inputs", function(data){
-
+	socket.on("placement", function(x, y){
+		
 	});
 
 	socket.on("disconnect", function(){
 		var player = game.getPlayerBySocket(socket.id);
 		if(player){
-			if(player.room){
-				player.room.removePlayer(player);
-			}
 			game.removePlayer(player);
 			playerIdGenerator.free(player.id);
 		}

@@ -4,7 +4,7 @@ var Matchmaking = function(game){
 }
 
 Matchmaking.prototype.addPlayer = function(player){
-	if(!this.isInQueue()){
+	if(!this.isInQueue(player)){
 		this.queue.push({player:player, time:Date.now(), found:false});
 		return true;
 	}

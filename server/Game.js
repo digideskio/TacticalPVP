@@ -13,16 +13,16 @@ Game.prototype.init = function(json){
 	}
 }
 
-Game.prototype.update = function(){
-	for(var i in this.rooms){
-		this.rooms[i].update();
-	}
-}
-
 Game.prototype.updateMatchmaking = function(){
 	var matchs = this.matchmaking.update();
 	for(var i in matchs){
-		
+		var r = new Room();
+		var teams = [1, 2];
+		for(var j in matchs[i]){
+			var p = matchs[i][j];
+			r.addPlayer(p, teams[j%2]);
+		}
+		r.start();
 	}
 }
 

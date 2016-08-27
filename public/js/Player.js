@@ -10,6 +10,8 @@ var Player = function(json){
 
 	this.fighting = false;
 
+	this.isReady = false;
+
 	this.team = 0;
 
 	this.characteristics = {
@@ -55,6 +57,57 @@ var Player = function(json){
 Player.prototype.init = function(json){
 	for(var i in json){
 		this[i] = json[i];
+	}
+}
+
+Player.prototype.action = function(action){
+	if(this.fighting == false || this.room == null){
+		return;
+	}
+
+	switch(action.type){
+		case "move":
+			if(this.room.placement == false){
+				if(this.room.units[this.room.unitTurn].id && this.room.units[this.room.unitTurn].id == this.id){
+					this.move(action.x, action.y);
+				}
+			}
+			break;
+		case "placement":
+			if(this.room.placement == true){
+				this.placement(action.x, action.y);
+			}
+			break;
+		default:
+			//spell
+	}
+}
+
+Player.prototype.move = function(x, y){
+
+}
+
+Player.prototype.placement = function(x, y){
+	var tiles = this.room.map.tiles;
+
+	if(tiles[x] && tiles[x][y] && tiles[x][y].player == this.team){
+		var freeCell = true;
+		for(var i in this.room.units){
+			if(this.room.units[i].x == x && this.room.units[i].y == y){
+				freeCell = false;
+				break;
+			}
+		}
+		if(freeCell){
+			this.x = parseInt(x);
+			this.y = parseInt(y);
+
+			for(var i in this.room.players){
+				if(this.room.players[i].team == this.team){
+					Utils.msgTo(this.room.players[i].socket, "placement", [{id:this.id, x:this.x, y:this.y}]);
+				}
+			}
+		}
 	}
 }
 
@@ -108,7 +161,7 @@ Player.prototype.removeSpell = function(spell){
 }
 
 Player.prototype.addItem = function(item){
-	if(this.fighting){
+	if(!this.fighting || this.room == null){
 		return;
 	}
 

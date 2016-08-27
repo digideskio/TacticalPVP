@@ -15,3 +15,12 @@ Client.prototype.update = function(){
 		
 	}
 }
+
+Client.prototype.click = function(x, y){
+	x = Math.floor(x / this.display.tilesize);
+	y = Math.floor(y / this.display.tilesize);
+
+	if(this.room.placement){
+		socket.emit("placement", {x:x, y:y});
+	}
+}

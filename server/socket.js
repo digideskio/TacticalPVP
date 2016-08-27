@@ -34,8 +34,17 @@ io.on('connection', function(socket){
 		}
 	});
 
-	socket.on("placement", function(x, y){
-		
+	socket.on("placement", function(data){
+		var player = game.getPlayerBySocket(socket.id);
+		if(!player){
+			return;
+		}
+
+		player.action({
+			type:"placement",
+			x:data.x,
+			y:data.y
+		});
 	});
 
 	socket.on("disconnect", function(){

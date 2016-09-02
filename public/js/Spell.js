@@ -11,11 +11,11 @@ var Spells = function(json){
 	this.countdown = 0;
 	this.turnUse = 0;
 	this.freeCell = false;
-	this.cs = 0;
+	this.CH = 0;
 	this.AOE = [[1]];
 	this.axis = "all";
 	this.effect = "";
-	this.cseffect = "";
+	this.CHeffect = "";
 	this.initCountdown = 0;
 
 	this.lastUse = 0;

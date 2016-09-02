@@ -1,16 +1,28 @@
 {
   "name": "tacticalpvp",
   "version": "1.0.0",
-  "description": "",
-  "main": "tactical.js",
+  "description": "Multiplayer asynchronous 2d platform browser game. This game is currently in **WIP**",
+  "main": "pvp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xviniette/TacticalPVP.git"
+  },
   "author": "Vincent BAZIA",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xviniette/TacticalPVP/issues"
+  },
+  "homepage": "https://github.com/xviniette/TacticalPVP#readme",
   "dependencies": {
+    "async": "^2.0.1",
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "fs": "0.0.2",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^7.1.9",
+    "mysql": "^2.11.1",
     "socket.io": "^1.4.8"
   }
 }

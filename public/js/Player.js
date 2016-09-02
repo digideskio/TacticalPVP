@@ -15,32 +15,31 @@ var Player = function(json){
 	this.team = 0;
 
 	this.characteristics = {
-		life:0,
-		erodedlife:0,
-		maxlife:0,
+		HP:0,
+		HPMAX:0,
+		erodedHP:0,
 		AP:0,
 		MP:0,
 		range:0,
 		initiative:0,
-		cs:0,
-		magic:0,
-		physic:0,
+		CH:0,
+		power:0,
+		damage:0,
 		heal:0,
-		dommagic:0,
-		domphysic:0,
-		domheal:0,
-		resmagic:0,
-		resphysic:0,
-		resdommagic:0,
-		resdomphysic:0,
-		wisdom:0,
-		tackle:0,
-		escape:0,
+		damheal:0,
+		resistance:0,
+		damresistance:0,
+		APloss:0,
+		MPloss:0,
+		APresistance:0,
+		MPresistance:0,
+		lock:0,
+		dodgle:0,
 		erosion:0
 	}
 
 	this.defaultCharacteristics = {
-		life:60,
+		HP:60,
 		AP:6,
 		MP:3,
 		erosion:10
@@ -67,23 +66,53 @@ Player.prototype.action = function(action){
 
 	switch(action.type){
 		case "move":
-			if(this.room.placement == false){
-				if(this.room.units[this.room.unitTurn].id && this.room.units[this.room.unitTurn].id == this.id){
-					this.move(action.x, action.y);
-				}
+		if(this.room.placement == false){
+			if(this.room.units[this.room.unitTurn].id && this.room.units[this.room.unitTurn].id == this.id){
+				this.move(action.x, action.y);
 			}
-			break;
+		}
+		break;
 		case "placement":
-			if(this.room.placement == true){
-				this.placement(action.x, action.y);
-			}
-			break;
+		if(this.room.placement == true){
+			this.placement(action.x, action.y);
+		}
+		break;
 		default:
-			//spell
 	}
 }
 
-Player.prototype.move = function(x, y){
+Player.prototype.move = function(position){
+	if(position.length > this.characteristics.MP){
+		return;
+	}
+
+	var mapMatrix = this.room.getAllObstacles();
+
+	var dx = this.x;
+	var dy = this.y;
+
+	for(var i in position){
+		if((Math.abs(position[i].x - dx) + Math.abs(position[i].y - dy)) != 1){
+			//jump cell
+			return;
+		}
+		dx = position[i].x;
+		dy = position[i].y;
+
+		if(!(mapMatrix[dx] && mapMatrix[dx][dy] && mapMatrix[dx][dy].type == 0 && (!mapMatrix[dx][dy].unit))){
+			//obstacle on way
+			return;
+		}
+	}
+
+	this.x = position[position.length - 1].x;
+	this.y = position[position.length - 1].y;
+
+	this.characteristics.MP -= position.length;
+
+	for(var i in this.room.players){
+		Utils.msgTo(this.room.players[i].socket, "placement", [{id:this.id, x:this.x, y:this.y}]);
+	}
 
 }
 

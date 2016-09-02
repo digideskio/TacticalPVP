@@ -26,7 +26,7 @@ Room.prototype.init = function(json){
 
 Room.prototype.start = function(){
 	this.map = new Map();
-	this.map.generate(10, 10, Math.floor(Math.random() * 3 + 3), Math.floor(Math.random() * 3 + 3), 3);
+	this.map.generate(15, 15, Math.floor(Math.random() * 5 + 5), Math.floor(Math.random() * 5 + 3), 4);
 	this.placement = true;
 
 	this.units = this.getPlayersByInitiative();
@@ -76,6 +76,8 @@ Room.prototype.nextTurn = function(){
 		}
 	}
 
+	this.units[this.unitTurn].updateCharacteristics();
+
 	var turnTime = 30 * 1000;
 	this.timeleft = Date.now() + turnTime;
 
@@ -88,6 +90,7 @@ Room.prototype.nextTurn = function(){
 		_this.nextTurn();
 	}, turnTime);
 }
+
 
 Room.prototype.addPlayer = function(player, team){
 	player.room = this;
@@ -152,6 +155,23 @@ Room.prototype.initPlayersPlacement = function(){
 			this.players[i].y = parseInt(cell.y);
 		}
 	}
+}
+
+Room.prototype.getAllObstacles = function(){
+	var map = [];
+	for(var x in that.map.tiles){
+		map[x] = [];
+		for(var y in that.map.tiles[x]){
+			var cell = that.map.tiles[x][y];
+			map[x][y] = cell;
+		}
+	}
+
+	for(var i in this.units){
+		var unit = this.units[i];
+		map[unit.x][unit.y].unit = unit;
+	}
+	return map;
 }
 
 

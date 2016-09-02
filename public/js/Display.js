@@ -28,16 +28,18 @@ Display.prototype.render = function(){
 				}
 				this.ctx.fillRect(x * this.tilesize, y * this.tilesize, this.tilesize, this.tilesize);
 			}
-
-			if(tiles[x][y].player){
-				if(tiles[x][y].player == 1){
-					this.ctx.fillStyle = "blue";
+			if(this.client.room.placement){
+				if(tiles[x][y].player){
+					if(tiles[x][y].player == 1){
+						this.ctx.fillStyle = "blue";
+					}
+					if(tiles[x][y].player == 2){
+						this.ctx.fillStyle = "red";
+					}
+					this.ctx.fillRect(x * this.tilesize, y * this.tilesize, this.tilesize, this.tilesize);
 				}
-				if(tiles[x][y].player == 2){
-					this.ctx.fillStyle = "red";
-				}
-				this.ctx.fillRect(x * this.tilesize, y * this.tilesize, this.tilesize, this.tilesize);
 			}
+			
 
 			this.ctx.strokeRect(x * this.tilesize, y * this.tilesize, this.tilesize, this.tilesize);
 		}

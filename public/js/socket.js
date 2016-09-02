@@ -21,4 +21,10 @@ $(function(){
 			}
 		}
 	});
+
+	socket.on("turn", function(data){
+		data.timeleft += Date.now();
+		client.room.init(data);
+		client.room.placement = false;
+	});
 });

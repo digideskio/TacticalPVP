@@ -6,11 +6,11 @@ module.exports = function (app, router) {
     router.get("/get/:id", function (req, res) {
         mysql.spells.get(req.params.id, function (err, data) {
             if (err) {
-                res.json({ error: "Error getting item" });
+                res.json({ error: "Error getting spell" });
                 return;
             }
             if (data.length == 0) {
-                res.json({ error: "Item not exists" });
+                res.json({ error: "Spell not exists" });
                 return;
             }
             res.json(data[0]);
@@ -62,32 +62,32 @@ module.exports = function (app, router) {
                     }
                     var spell = data[0];
                     if (spell.equiped == 1) {
-                        callback("Item already equiped");
+                        callback("Spell already equiped");
                         return;
                     }
-                    callback(null, item);
+                    callback(null, spell);
                 });
             },
-            function (item, callback) {
-                mysql.items.getEquipedUserItems(req.connected.id, function (err, data) {
+            function (spell, callback) {
+                mysql.spells.getEquipedUserSpells(req.connected.id, function (err, data) {
                     if (err) {
-                        callback("Error getting user items");
+                        callback("Error getting user spells");
                         return;
                     }
                     var lvl = 0;
                     for (var i in data) {
                         lvl += data[i].level;
                     }
-                    if (lvl + item.level >= maxLevel) {
+                    if (lvl + spell.level >= maxLevel) {
                         callback("Level to high");
                         return;
                     }
-                    callback(null, item);
+                    callback(null, spell);
                 });
             },
-            function (item, callback) {
-                mysql.items.updateUserItem(item.id_ui, { equiped: 1 }, function (err, data) {
-                    callback(null, item);
+            function (spell, callback) {
+                mysql.spells.updateUserSpell(spell.id_us, { equiped: 1 }, function (err, data) {
+                    callback(null, spell);
                 });
             }
         ], function (err, data) {
@@ -105,23 +105,23 @@ module.exports = function (app, router) {
             return;
         }
 
-        mysql.items.getUserItem(req.connected.id, req.params.id, function (err, data) {
+        mysql.spells.getUserSpell(req.connected.id, req.params.id, function (err, data) {
             if (err) {
-                res.json({ error: "Error getting user item" });
+                res.json({ error: "Error getting user spell" });
                 return;
             }
             if (data.length == 0) {
-                res.json({ error: "Item not posseded" });
+                res.json({ error: "Spell not posseded" });
                 return;
             }
-            var item = data[0];
-            if (item.equiped == 0) {
-                res.json({ error: "Item unequiped" });
+            var spell = data[0];
+            if (spell.equiped == 0) {
+                res.json({ error: "Spell unequiped" });
                 return;
             }
 
-            mysql.items.updateUserItem(item.id_ui, { equiped: 0 }, function (err, data) {
-                res.json(item);
+            mysql.spells.updateUserSpell(spell.id_us, { equiped: 0 }, function (err, data) {
+                res.json(spell);
             });
         });
     });

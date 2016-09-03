@@ -89,7 +89,7 @@ module.exports = function (app) {
                 db.query("DELETE FROM user_spell WHERE id_us = ?;", [id], callback);
             },
             updateUserSpell: function (id, datas, callback) {
-                db.query("UPDATE user_spell SET ? WHERE ?", [datas, { id_ui: id }], callback);
+                db.query("UPDATE user_spell SET ? WHERE ?", [datas, { id_us: id }], callback);
             }
         },
     }

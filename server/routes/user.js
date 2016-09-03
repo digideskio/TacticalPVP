@@ -26,7 +26,11 @@ module.exports = function (app, router) {
                                 elo: 1500,
                                 xp: 0,
                                 golds: 0,
-                                gems: 0
+                                gems: 0,
+                                win: 0,
+                                lose: 0,
+                                draw: 0,
+                                registration: Math.floor(Date.now()/1000),
                             }
                             callback(null, userToSave);
                         } else {
@@ -92,6 +96,8 @@ module.exports = function (app, router) {
                     if (err) {
                         return;
                     }
+                    delete rows[0].token;
+                    delete rows[0].password;
                     res.json(rows[0]);
                 });
             } else {
@@ -103,6 +109,8 @@ module.exports = function (app, router) {
                     return;
                 }
                 if (rows.length > 0) {
+                    delete rows[0].token;
+                    delete rows[0].password;
                     res.json(rows[0]);
                 } else {
                     res.json({ error: "Non-existing user." });

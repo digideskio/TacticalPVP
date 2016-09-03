@@ -13,7 +13,7 @@ module.exports = function (app, router) {
         if (req.body.login && req.body.password && req.body.login.length > 0 && req.body.password.length > 0) {
 
             async.waterfall([
-                function(callback){
+                function (callback) {
                     mysql.user.getUserByLogin(req.body.login, function (err, rows) {
                         if (err) {
                             callback(err);
@@ -23,19 +23,19 @@ module.exports = function (app, router) {
                             var userToSave = {
                                 login: req.body.login,
                                 password: req.body.password,
-                                elo:1500,
-                                xp:0,
-                                golds:0,
-                                gems:0
+                                elo: 1500,
+                                xp: 0,
+                                golds: 0,
+                                gems: 0
                             }
                             callback(null, userToSave);
-                        }else{
+                        } else {
                             res.json({ error: "Login already taken." });
                             callback(true);
                         }
                     });
                 },
-                function(userToSave, callback){
+                function (userToSave, callback) {
                     mysql.user.addUser(userToSave, function (err, rows) {
                         if (err) {
                             res.json({ error: "Problem adding user." });
@@ -43,7 +43,7 @@ module.exports = function (app, router) {
                             return;
                         }
                         var user = {
-                            id:rows.insertId,
+                            id: rows.insertId,
                             login: req.body.login,
                             password: req.body.password
                         };
@@ -54,7 +54,7 @@ module.exports = function (app, router) {
                         callback(null);
                     });
                 }
-                ]);
+            ]);
         } else {
             res.json({ error: "Login or password are empty." });
         }
@@ -138,7 +138,7 @@ module.exports = function (app, router) {
         });
     });
 
-    router.get("/autocomplete/:begin", function(req, res){
+    router.get("/autocomplete/:begin", function (req, res) {
         mysql.user.autocomplete(req.params.begin, function (err, rows) {
             if (err) {
                 res.json({ error: "Error getting autocomplete" });

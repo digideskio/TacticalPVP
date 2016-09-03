@@ -36,17 +36,61 @@ module.exports = function (app) {
             updateUser: function (datas, id, callback) {
                 db.query("UPDATE users SET ? WHERE ?", [datas, { id_u: id }], callback);
             },
-            getRanking: function (attribute, limit, offset, callback) {
-                if(attribute == "xp"){
-                    db.query("SELECT * FROM users ORDER BY xp DESC LIMIT ? OFFSET ?;", [limit, offset], callback);
-                }else{
-                    db.query("SELECT * FROM users ORDER BY elo DESC LIMIT ? OFFSET ?;", [limit, offset], callback);
-                }
-                
-            },
             autocomplete: function(begin, callback){
                 db.query("SELECT * FROM users WHERE login like '"+begin+"%' ORDER BY elo DESC LIMIT 0, 10;", callback);
             }
-        }
+        },
+        items: {
+            get: function (id, callback) {
+                db.query("SELECT * FROM items WHERE id_i = ?;", [id], callback);
+            },
+            getAll: function (callback) {
+                db.query("SELECT * FROM items;", callback);
+            },
+            getAllUserItems: function (id, callback) {
+                db.query("SELECT * FROM items i, user_item ui WHERE ui.id_i = i.id_i AND ui.id_u = ?;", [id], callback);
+            },
+            getEquipedUserItems: function (id, callback) {
+                db.query("SELECT * FROM items i, user_item ui WHERE ui.id_i = i.id_i AND ui.id_u = ? AND equiped = 1;", [id], callback);
+            },
+            getUserItem: function (id_u, id_i, callback) {
+                db.query("SELECT * FROM items i, user_item ui WHERE ui.id_i = i.id_i AND ui.id_u = ? AND ui.id_i = ?;", [id_u, id_i], callback);
+            },
+            addUserItem: function (datas, callback) {
+                db.query("INSERT INTO user_item SET ?", datas, callback);
+            },
+            deleteUserItem: function (id, callback) {
+                db.query("DELETE FROM user_item WHERE id_ui = ?;", [id], callback);
+            },
+            updateUserItem: function (id, datas, callback) {
+                db.query("UPDATE user_item SET ? WHERE ?", [datas, { id_ui: id }], callback);
+            }
+        },
+        spells: {
+            get: function (id, callback) {
+                db.query("SELECT * FROM spells WHERE id_s = ?;", [id], callback);
+            },
+            getAll: function (callback) {
+                db.query("SELECT * FROM spells;", callback);
+            },
+            getAllUserSpells: function (id, callback) {
+                db.query("SELECT * FROM spells s, user_spell us WHERE us.id_s = s.id_s AND us.id_u = ?;", [id], callback);
+            },
+            getEquipedUserSpells: function (id, callback) {
+                db.query("SELECT * FROM spells s, user_spell us WHERE us.id_s = s.id_s AND us.id_u = ? AND equiped = 1;", [id], callback);
+            },
+            getUserSpell: function (id_u, id_s, callback) {
+                db.query("SELECT * FROM spells s, user_spell us WHERE us.id_s = s.id_s AND us.id_u = ? AND us.id_s = ?;", [id_u, id_s], callback);
+            },
+            addUserSpell: function (datas, callback) {
+                db.query("INSERT INTO user_spell SET ?", datas, callback);
+            },
+            deleteUserSpell: function (id, callback) {
+                db.query("DELETE FROM user_spell WHERE id_us = ?;", [id], callback);
+            },
+            updateUserSpell: function (id, datas, callback) {
+                db.query("UPDATE user_spell SET ? WHERE ?", [datas, { id_ui: id }], callback);
+            }
+        },
     }
 }

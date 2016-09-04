@@ -17,7 +17,7 @@ module.exports = function (app, router) {
         });
     });
 
-    router.get("/getAll", function (req, res) {
+    router.get("/all", function (req, res) {
         mysql.spells.getAll(function (err, data) {
             if (err) {
                 res.json({ error: "Error getting spells" });
@@ -27,7 +27,7 @@ module.exports = function (app, router) {
         });
     });
 
-    router.get("/getUserSpells", function (req, res) {
+    router.get("/user", function (req, res) {
         if (!req.connected) {
             res.json({ error: "Need to be connected" });
             return;

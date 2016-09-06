@@ -2,13 +2,14 @@ $(function(){
 	socket = io();
 
 	socket.on("login", function(){
-		socket.emit("login", {token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9naW4iOiJ2aW5jZW50IiwicGFzc3dvcmQiOiIxMjMiLCJpYXQiOjE0NzI5MzY5MTZ9.-pPrqRTBJUMuI7t9mPLjch4yi-Tr_Wk5s7BDkZT2HfA"});
+		socket.emit("login", {token:localStorage.getItem("token")});
 	});
 
 	socket.on("init", function(data){
 		data.timeleft += Date.now();
 		var room = new Room(data);
 		client.room = room;
+		console.log(data);
 	});
 
 	socket.on("placement", function(datas){

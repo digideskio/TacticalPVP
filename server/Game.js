@@ -22,7 +22,33 @@ Game.prototype.updateMatchmaking = function(){
 			var p = matchs[i][j];
 			r.addPlayer(p, teams[j%2]);
 		}
-		r.start();
+		async.each(matchs[i], function(p, callback){
+			async.parallel({
+				items:function(cb){
+					MysqlManager.items.getEquipedUserItems(p.id, function(err, res){
+						if(err){
+							cb(null, []);
+							return;
+						}
+						cb(null, res);
+					});
+				},
+				spells:function(cb){
+					MysqlManager.spells.getEquipedUserSpells(p.id, function(err, res){
+						if(err){
+							cb(null, []);
+							return;
+						}
+						cb(null, res);
+					});
+				}
+			}, function(err, results){
+				p.items = results.items;
+				callback();
+			});
+		}, function(err){
+			r.start();
+		});
 	}
 }
 

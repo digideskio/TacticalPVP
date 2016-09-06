@@ -25,7 +25,6 @@ Matchmaking.prototype.removePlayer = function(player){
 		if(this.queue[i].player.id == player.id){
 			this.queue.splice(i, 1);
 			return true;
-			break;
 		}
 	}
 	return false;

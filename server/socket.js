@@ -3,6 +3,8 @@ io.on('connection', function (socket) {
 
 	socket.emit("nbPlayers", game.nbPlayers());
 
+
+
 	socket.on("login", function (data) {
 		MysqlManager.user.getUserByToken(data.token, function (err, res) {
 			if (res.length == 1) {
@@ -13,8 +15,15 @@ io.on('connection', function (socket) {
 					socket: socket.id
 				});
 
+
+				var currentPlayer = game.getPlayerById(p.id_u);
+				if (currentPlayer != null) {
+					Utils.msgTo(currentPlayer.socket, "Disconnected", "One player disconnected you");
+				}
+
 				socket.emit("playerID", p.id_u);
 				game.addPlayer(player);
+
 			}
 		});
 	});

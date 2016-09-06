@@ -149,11 +149,11 @@ Player.prototype.updateCharacteristics = function(){
 	}
 
 	for(var i in this.items){
-		for(var j in this.items[i].characteristics){
+		for(var j in this.items[i]){
 			if(!this.characteristics[j]){
 				this.characteristics[j] = 0;
 			}
-			this.characteristics[j] += this.items[i].characteristics[j];
+			this.characteristics[j] += parseInt(this.items[i][j]);
 		}
 	}
 }
@@ -221,6 +221,16 @@ Player.prototype.removeItem = function(item){
 }
 
 Player.prototype.getPublicInformations = function(){
+	var stats = JSON.parse(JSON.stringify(this.characteristics));
+
+	delete stats.power;
+	delete stats.damage;
+	delete stats.range;
+	delete stats.initiative;
+	delete stats.CH;
+	delete stats.heal;
+	delete stats.damheal;
+
 	return {
 		id:this.id,
 		pseudo:this.pseudo,	
@@ -228,19 +238,7 @@ Player.prototype.getPublicInformations = function(){
 		y:this.y,
 		team:this.team,
 		spells:this.spells,
-		characteristics:{
-			life:this.characteristics.life,
-			maxlife:this.characteristics.maxlife,
-			erodedlife:this.characteristics.erodedlife,
-			AP:this.characteristics.AP,
-			MP:this.characteristics.MP,
-			wisdom:this.characteristics.wisdom,
-			tackle:this.characteristics.tackle,
-			resmagic:this.characteristics.resmagic,
-			resphysic:this.characteristics.resphysic,
-			resdommagic:this.characteristics.resdommagic,
-			resdomphysic:this.characteristics.resdomphysic
-		},
+		characteristics:stats,
 		buffs:this.buffs
 	}
 }

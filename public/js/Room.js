@@ -42,6 +42,10 @@ Room.prototype.start = function(){
 	}, cdPlacement);
 
 	for(var i in this.players){
+		this.players[i].updateCharacteristics();
+	}
+
+	for(var i in this.players){
 		Utils.msgTo(this.players[i].socket, "init", this.getInitInformations(this.players[i]));
 	}
 }

@@ -86,6 +86,8 @@ module.exports = function (app, router) {
                         if(!found){
                             mysql.spells.addUserSpell({id_u:req.connected.id, id_s:spell.id_s, equiped:0, position:0});
                             results["userSpells"].push(spell);
+                        }else{
+                            spell.posseded = true;
                         }
                         drops.spells.push(spell);
                         results["allSpells"].splice(index, 1);
@@ -107,6 +109,8 @@ module.exports = function (app, router) {
                         if(!found){
                             mysql.items.addUserItem({id_u:req.connected.id, id_i:item.id_i, equiped:0, position:0});
                             results["userItems"].push(item);
+                        }else{
+                            item.posseded = true;
                         }
                         drops.items.push(item);
                         results["allItems"].splice(index, 1);

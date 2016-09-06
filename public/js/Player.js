@@ -148,8 +148,12 @@ Player.prototype.updateCharacteristics = function(){
 		this.characteristics[i] += this.defaultCharacteristics[i];
 	}
 
+	var uselessData = ["id_i", "name", "level", "id_ui", "id_u", "equiped", "position"];
 	for(var i in this.items){
 		for(var j in this.items[i]){
+			if(uselessData.indexOf(j) != -1){
+				continue;
+			}
 			if(!this.characteristics[j]){
 				this.characteristics[j] = 0;
 			}

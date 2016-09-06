@@ -1,6 +1,13 @@
 var express = require('express');
 var app = express();
 app.set("express", express);
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var fs = require('fs');
+
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var fs = require('fs');
 
 var bodyParser = require('body-parser');
 
@@ -17,5 +24,6 @@ app.use(express.static("public"));
 
 var routes = require('./server/routes.js')(app);
 
-app.listen(3000);
+eval(fs.readFileSync('./server/gameserver.js')+'');
 
+http.listen(3000);

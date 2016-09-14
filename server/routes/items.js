@@ -3,21 +3,7 @@ var async = require("async");
 module.exports = function (app, router) {
     var mysql = app.get("MysqlManager");
 
-    router.get("/get/:id", function (req, res) {
-        mysql.items.get(req.params.id, function (err, data) {
-            if (err) {
-                res.json({ error: "Error getting item" });
-                return;
-            }
-            if (data.length == 0) {
-                res.json({ error: "Item not exists" });
-                return;
-            }
-            res.json(data[0]);
-        });
-    });
-
-    router.get("/all", function (req, res) {
+    router.get("/", function (req, res) {
         mysql.items.getAll(function (err, data) {
             if (err) {
                 res.json({ error: "Error getting items" });
@@ -38,6 +24,20 @@ module.exports = function (app, router) {
                 return;
             }
             res.json(data);
+        });
+    });
+
+    router.get("/:id", function (req, res) {
+        mysql.items.get(req.params.id, function (err, data) {
+            if (err) {
+                res.json({ error: "Error getting item" });
+                return;
+            }
+            if (data.length == 0) {
+                res.json({ error: "Item not exists" });
+                return;
+            }
+            res.json(data[0]);
         });
     });
 

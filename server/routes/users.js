@@ -88,7 +88,7 @@ module.exports = function (app, router) {
         }
     });
 
-    router.get("/profile/:login?", function (req, res) {
+    router.get("/:login?", function (req, res) {
         if (!req.params.login) {
             if (req.connected) {
                 mysql.user.getUserById(req.connected.id, function (err, rows) {
@@ -119,37 +119,15 @@ module.exports = function (app, router) {
         }
     });
 
-    router.get("/ranking/:attribute?/:limit?/:offset?", function (req, res) {
-        var attribute = "elo";
-        if (req.params.attribute && req.params.attribute == "xp") {
-            attribute = "xp";
-        }
-
-        var limit = 100;
-        if (req.params.limit) {
-            limit = parseInt(req.params.limit);
-        }
-
-        var offset = 0;
-        if (req.params.offset) {
-            offset = parseInt(req.params.offset);
-        }
-
-        mysql.user.getRanking(attribute, limit, offset, function (err, rows) {
-            if (err) {
-                res.json({ error: "Error getting ranking" });
-                return;
-            }
-            res.json(rows);
-
-        });
-    });
-
     router.get("/autocomplete/:begin", function (req, res) {
         mysql.user.autocomplete(req.params.begin, function (err, rows) {
             if (err) {
                 res.json({ error: "Error getting autocomplete" });
                 return;
+            }
+            for(var i in rows){
+                delete rows[i].password;
+                delete rows[i].token;
             }
             res.json(rows);
         });

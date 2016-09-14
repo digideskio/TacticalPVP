@@ -3,21 +3,7 @@ var async = require("async");
 module.exports = function (app, router) {
     var mysql = app.get("MysqlManager");
 
-    router.get("/get/:id", function (req, res) {
-        mysql.spells.get(req.params.id, function (err, data) {
-            if (err) {
-                res.json({ error: "Error getting spell" });
-                return;
-            }
-            if (data.length == 0) {
-                res.json({ error: "Spell not exists" });
-                return;
-            }
-            res.json(data[0]);
-        });
-    });
-
-    router.get("/all", function (req, res) {
+    router.get("/", function (req, res) {
         mysql.spells.getAll(function (err, data) {
             if (err) {
                 res.json({ error: "Error getting spells" });
@@ -38,6 +24,20 @@ module.exports = function (app, router) {
                 return;
             }
             res.json(data);
+        });
+    });
+
+    router.get("/:id", function (req, res) {
+        mysql.spells.get(req.params.id, function (err, data) {
+            if (err) {
+                res.json({ error: "Error getting spell" });
+                return;
+            }
+            if (data.length == 0) {
+                res.json({ error: "Spell not exists" });
+                return;
+            }
+            res.json(data[0]);
         });
     });
 

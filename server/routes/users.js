@@ -24,7 +24,6 @@ module.exports = function (app, router) {
                                 login: req.body.login,
                                 password: req.body.password,
                                 elo: 1500,
-                                xp: 0,
                                 golds: 0,
                                 gems: 0,
                                 win: 0,

@@ -5,6 +5,10 @@ $(function(){
 		socket.emit("login", {token:localStorage.getItem("token")});
 	});
 
+	socket.on("playerID", function(id){
+		client.pid = parseInt(id);
+	});
+
 	socket.on("init", function(data){
 		data.timeleft += Date.now();
 		var room = new Room(data);
@@ -27,5 +31,7 @@ $(function(){
 		data.timeleft += Date.now();
 		client.room.init(data);
 		client.room.placement = false;
+
+
 	});
 });

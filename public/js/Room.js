@@ -86,7 +86,7 @@ Room.prototype.nextTurn = function(){
 	this.timeleft = Date.now() + turnTime;
 
 	for(var i in this.players){
-		Utils.msgTo(this.players[i].socket, "turn", {unit:this.unitTurn, timeleft:turnTime});
+		Utils.msgTo(this.players[i].socket, "turn", {unitTurn:this.unitTurn, timeleft:turnTime});
 	}
 
 	var _this = this;

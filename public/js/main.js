@@ -1,35 +1,30 @@
 var client;
 var IS_SERVER = false;
-var vue;
 var socket;
 
-$(function(){
+$(function () {
 	client = new Client();
 
-	setInterval(function(){
+	var update = function () {
 		client.display.render();
-	}, 1000/30);
+	}
+	requestAnimationFrame(update);
 
-	vue = new Vue({
-		el:"#app",
-		data:{
-			matchmaking:function(){
-				socket.emit("matchmaking");
-			}
-		},
-		methods:{
-		}
-	});
-
-	$("#canvas").click(function(e){
+	$("#canvas").click(function (e) {
 		var x = e.pageX - $(this).offset().left;
 		var y = e.pageY - $(this).offset().top;
 
 		client.click(x, y);
 	});
 
+	$.ajaxSetup({
+		beforeSend: function (xhr) {
+			var token = localStorage.getItem("token");
+			if (token) {
+				xhr.setRequestHeader('Authorization', token);
+			}
+		}
+	});
 
-	window.onresize = function(){
-	}
 
 });

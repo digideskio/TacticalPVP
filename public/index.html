@@ -8,6 +8,44 @@
 </head>
 <body id="app">
 
+		<h1>{{self.login}} - {{self.elo}}</h1>
+		<h2>Golds : {{self.golds}} | Gems : {{self.gems}} </h2>
+		
+		<h1>Items</h1>
+		<h2>Equiped - {{itemsLevel}}/{{items.maxlevel}}</h2>
+		<ul>
+			<li v-for="item in items.self" v-if="item.equiped == 1">
+				{{item.name}} <button v-on:click="unequipItem($index)">Unequip</button>
+			</li>
+		</ul>
+		<h2>Unequiped</h2>
+		<ul>
+			<li v-for="item in items.self" v-if="item.equiped == 0">
+				{{item.name}} <button v-on:click="equipItem($index)">Equip</button>
+			</li>
+		</ul>
+
+		<h1>CHARACTERISTICS</h1>
+		<ul>
+			<li v-for="(charac, value) in characteristics" v-if="value != 0 && charac != 'erosion'">{{charac}} : {{value}}</li>
+		</ul>
+
+		<h1>Spells - {{spellsLevel}}/{{spells.maxlevel}}</h1>
+		<h2>Equiped</h2>
+		<ul>
+			<li v-for="spell in spells.self"  v-if="spell.equiped == 1">
+				{{spell.name}} <button v-on:click="unequipSpell($index)">Unequip</button>
+			</li>
+		</ul>
+		<h2>Unequiped</h2>
+		<ul>
+			<li v-for="spell in spells.self"  v-if="spell.equiped == 0">
+				{{spell.name}} <button v-on:click="equipSpell($index)">Equip</button>
+			</li>
+		</ul>
+
+
+
 
 	<button @click="matchmaking()">MatchMaking</button><br/>
 	<canvas id="canvas" width="800" height="800"></canvas>
@@ -18,11 +56,13 @@
 	<script src="./js/lib/socket.io-1.4.5.js"></script>
 	<script src="./js/lib/SeededRandom.js"></script>
 
+	<script src="./js/config.js"></script>
 	<script src="./js/Client.js"></script>
 	<script src="./js/Display.js"></script>
 	<script src="./js/Room.js"></script>
 	<script src="./js/Map.js"></script>
 	<script src="./js/Player.js"></script>
 	<script src="./js/main.js"></script>
+	<script src="./js/events.js"></script>
 	<script src="./js/socket.js"></script>
 </body>

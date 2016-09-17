@@ -23,8 +23,9 @@ app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
+eval(fs.readFileSync('./server/gameserver.js')+'');
+
 var routes = require('./server/routes.js')(app);
 
-eval(fs.readFileSync('./server/gameserver.js')+'');
 
 http.listen(3000);

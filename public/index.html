@@ -6,44 +6,54 @@
 	<title>TACTICAL</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
 </head>
+
 <body id="app">
 
-		<h1>{{self.login}} - {{self.elo}}</h1>
-		<h2>Golds : {{self.golds}} | Gems : {{self.gems}} </h2>
-		
-		<h1>Items</h1>
-		<h2>Equiped - {{itemsLevel}}/{{items.maxlevel}}</h2>
-		<ul>
-			<li v-for="item in items.self" v-if="item.equiped == 1">
-				{{item.name}} <button v-on:click="unequipItem($index)">Unequip</button>
-			</li>
-		</ul>
-		<h2>Unequiped</h2>
-		<ul>
-			<li v-for="item in items.self" v-if="item.equiped == 0">
-				{{item.name}} <button v-on:click="equipItem($index)">Equip</button>
-			</li>
-		</ul>
+	<h1>{{self.login}} - {{self.elo}}</h1>
+	<h2>Golds : {{self.golds}} | Gems : {{self.gems}} </h2>
 
-		<h1>CHARACTERISTICS</h1>
-		<ul>
-			<li v-for="(charac, value) in characteristics" v-if="value != 0 && charac != 'erosion'">{{charac}} : {{value}}</li>
-		</ul>
+	<h1>Items</h1>
+	<h2>Equiped - {{itemsLevel}}/{{items.maxlevel}}</h2>
+	<ul>
+		<li v-for="item in items.self" v-if="item.equiped == 1">
+			<h2>{{item.name}} - {{item.level}} <button v-on:click="unequipItem($index)">Unequip</button></h2>
+			<ul>
+				<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
+			</ul>
+		</li>
+	</ul>
+	<h2>Unequiped</h2>
+	<ul>
+		<li v-for="item in items.self" v-if="item.equiped == 0">
+			<h2>{{item.name}} - {{item.level}} <button v-on:click="equipItem($index)">Equip</button></h2>
+			<ul>
+				<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
+			</ul>
+		</li>
+	</ul>
 
-		<h1>Spells - {{spellsLevel}}/{{spells.maxlevel}}</h1>
-		<h2>Equiped</h2>
-		<ul>
-			<li v-for="spell in spells.self"  v-if="spell.equiped == 1">
-				{{spell.name}} <button v-on:click="unequipSpell($index)">Unequip</button>
-			</li>
-		</ul>
-		<h2>Unequiped</h2>
-		<ul>
-			<li v-for="spell in spells.self"  v-if="spell.equiped == 0">
-				{{spell.name}} <button v-on:click="equipSpell($index)">Equip</button>
-			</li>
-		</ul>
+	<h1>CHARACTERISTICS</h1>
+	<ul>
+		<li v-for="(charac, value) in characteristics" v-if="value != 0 && charac != 'erosion'">{{charac}} : {{value}}</li>
+	</ul>
 
+	<h1>Spells - {{spellsLevel}}/{{spells.maxlevel}}</h1>
+	<h2>Equiped</h2>
+	<ul>
+		<li v-for="spell in spells.self" v-if="spell.equiped == 1">
+			{{spell.name}} <button v-on:click="unequipSpell($index)">Unequip</button>
+		</li>
+	</ul>
+	<h2>Unequiped</h2>
+	<ul>
+		<li v-for="spell in spells.self" v-if="spell.equiped == 0">
+			{{spell.name}} <button v-on:click="equipSpell($index)">Equip</button>
+		</li>
+	</ul>
+
+	<h1>DROP !</h1>
+	<button v-on:click="dropping('golds')">DROP GOLDS ({{drop.DROP_GOLDS}}) golds</button>
+	<button v-on:click="dropping('gems')">DROP GEMS ({{drop.DROP_GEMS}}) gems</button>
 
 
 

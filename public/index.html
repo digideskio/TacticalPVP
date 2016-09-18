@@ -25,7 +25,7 @@
 	<h2>Unequiped</h2>
 	<ul>
 		<li v-for="item in items.self | orderBy 'level'" v-if="item.equiped == 0">
-			<h2>{{item.name}} - {{item.level}} <button v-on:click="equipItem(item.id_i)">Equip</button></h2>
+			<h2>{{item.name}} - {{item.level}} <button v-if="itemsLevel + item.level <= items.maxlevel" v-on:click="equipItem(item.id_i)">Equip</button></h2>
 			<ul>
 				<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
 			</ul>
@@ -47,7 +47,7 @@
 	<h2>Unequiped</h2>
 	<ul>
 		<li v-for="spell in spells.self | orderBy 'level'" v-if="spell.equiped == 0">
-			{{spell.name}} <button v-on:click="equipSpell(spell.id_s)">Equip</button>
+			{{spell.name}} <button v-if="spellsLevel + spell.level <= spells.maxlevel" v-on:click="equipSpell(spell.id_s)">Equip</button>
 		</li>
 	</ul>
 

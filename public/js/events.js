@@ -190,17 +190,13 @@ $(function () {
                             _this.self = data;
                         });
 
-                        for(var item of data.items){
-                            if(!item.posseded){
-                                _this.items.self.$set(item);
-                            }
-                        }
+                        requests.items.self(function (data) {
+                            _this.items.self = data;
+                        });
 
-                        for(var spell of data.spells){
-                            if(!spell.posseded){
-                                _this.spells.self.$set(spell);
-                            }
-                        }
+                        requests.spells.self(function (data) {
+                            _this.spells.self = data;
+                        });
                     }
                 });
             }

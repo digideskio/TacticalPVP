@@ -134,35 +134,51 @@ $(function () {
             }
         },
         methods: {
-            equipItem: function (index) {
+            equipItem: function (id) {
                 var _this = this;
-                requests.items.equip(this.items.self[index].id_i, function (data) {
+                requests.items.equip(id, function (data) {
                     if (!data.error) {
-                        _this.items.self[index].equiped = 1;
+                        for(var i in _this.items.self){
+                            if(_this.items.self[i].id_i == id){
+                                _this.items.self[i].equiped = 1;
+                            }
+                        }
                     }
                 });
             },
-            unequipItem: function (index) {
+            unequipItem: function (id) {
                 var _this = this;
-                requests.items.unequip(this.items.self[index].id_i, function (data) {
+                requests.items.unequip(id, function (data) {
                     if (!data.error) {
-                        _this.items.self[index].equiped = 0;
+                        for(var i in _this.items.self){
+                            if(_this.items.self[i].id_i == id){
+                                _this.items.self[i].equiped = 0;
+                            }
+                        }
                     }
                 });
             },
-            equipSpell: function (index) {
+            equipSpell: function (id) {
                 var _this = this;
-                requests.spells.equip(this.spells.self[index].id_s, function (data) {
+                requests.spells.equip(id, function (data) {
                     if (!data.error) {
-                        _this.spells.self[index].equiped = 1;
+                        for(var i in _this.spells.self){
+                            if(_this.spells.self[i].id_s == id){
+                                _this.spells.self[i].equiped = 1;
+                            }
+                        }
                     }
                 });
             },
-            unequipSpell: function (index) {
+            unequipSpell: function (id) {
                 var _this = this;
-                requests.spells.unequip(this.spells.self[index].id_s, function (data) {
+                requests.spells.unequip(id, function (data) {
                     if (!data.error) {
-                        _this.spells.self[index].equiped = 0;
+                        for(var i in _this.spells.self){
+                            if(_this.spells.self[i].id_s == id){
+                                _this.spells.self[i].equiped = 0;
+                            }
+                        }
                     }
                 });
             },

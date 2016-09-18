@@ -15,8 +15,8 @@
 	<h1>Items</h1>
 	<h2>Equiped - {{itemsLevel}}/{{items.maxlevel}}</h2>
 	<ul>
-		<li v-for="item in items.self" v-if="item.equiped == 1">
-			<h2>{{item.name}} - {{item.level}} <button v-on:click="unequipItem($index)">Unequip</button></h2>
+		<li v-for="item in items.self | orderBy 'level'" v-if="item.equiped == 1">
+			<h2>{{item.name}} - {{item.level}} <button v-on:click="unequipItem(item.id_i)">Unequip</button></h2>
 			<ul>
 				<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
 			</ul>
@@ -24,8 +24,8 @@
 	</ul>
 	<h2>Unequiped</h2>
 	<ul>
-		<li v-for="item in items.self" v-if="item.equiped == 0">
-			<h2>{{item.name}} - {{item.level}} <button v-on:click="equipItem($index)">Equip</button></h2>
+		<li v-for="item in items.self | orderBy 'level'" v-if="item.equiped == 0">
+			<h2>{{item.name}} - {{item.level}} <button v-on:click="equipItem(item.id_i)">Equip</button></h2>
 			<ul>
 				<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
 			</ul>
@@ -40,14 +40,14 @@
 	<h1>Spells - {{spellsLevel}}/{{spells.maxlevel}}</h1>
 	<h2>Equiped</h2>
 	<ul>
-		<li v-for="spell in spells.self" v-if="spell.equiped == 1">
-			{{spell.name}} <button v-on:click="unequipSpell($index)">Unequip</button>
+		<li v-for="spell in spells.self | orderBy 'level'" v-if="spell.equiped == 1">
+			{{spell.name}} <button v-on:click="unequipSpell(spell.id_s)">Unequip</button>
 		</li>
 	</ul>
 	<h2>Unequiped</h2>
 	<ul>
-		<li v-for="spell in spells.self" v-if="spell.equiped == 0">
-			{{spell.name}} <button v-on:click="equipSpell($index)">Equip</button>
+		<li v-for="spell in spells.self | orderBy 'level'" v-if="spell.equiped == 0">
+			{{spell.name}} <button v-on:click="equipSpell(spell.id_s)">Equip</button>
 		</li>
 	</ul>
 

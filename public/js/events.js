@@ -13,6 +13,11 @@ $(function () {
                 $.get("/users/" + login, function (data) {
                     callback(data);
                 });
+            },
+            ranking:function(page, nb, callback){
+                $.get("/users/ranking/"+page+"/"+nb, function(data){
+                    callback(data)
+                });
             }
         },
         items: {
@@ -80,7 +85,18 @@ $(function () {
     vue = new Vue({
         el: "#app",
         data: {
+            login: {
+                login: "",
+                password: ""
+            },
+            register: {
+                login: "",
+                password: "",
+                passwordconfirmation: ""
+            },
             self: null,
+            profile:{},
+            ranking:{players:[]},
             items: {
                 CHARACTERISTICS: CHARACTERISTICS,
                 maxlevel: MAX_ITEMS_LEVEL,
@@ -134,12 +150,41 @@ $(function () {
             }
         },
         methods: {
+            connection: function () {
+                var _this = this;
+                $.post("/users/login", { login: this.login.login, password: this.login.password }, function (data) {
+                    if (!data.error) {
+                        localStorage.setItem("token", data.token);
+                    } else {
+                        console.log("ERROR CONNECTION", data.error);
+                    }
+                    _this.loadAll();
+                });
+            },
+            registration: function () {
+                var _this = this;
+                if (this.register.password != this.register.passwordconfirmation) {
+                    console.log("PROBLEME PASSWORDS");
+                    return;
+                }
+                $.post("/users/register", { login: this.register.login, password: this.register.password }, function (data) {
+                    if (!data.error) {
+                        localStorage.setItem("token", data.token);
+                    } else {
+                        console.log("ERROR CONNECTION", data.error);
+                    }
+                    _this.loadAll();
+                });
+            },
+            disconnect:function(){
+                localStorage.removeItem("token");
+            },
             equipItem: function (id) {
                 var _this = this;
                 requests.items.equip(id, function (data) {
                     if (!data.error) {
-                        for(var i in _this.items.self){
-                            if(_this.items.self[i].id_i == id){
+                        for (var i in _this.items.self) {
+                            if (_this.items.self[i].id_i == id) {
                                 _this.items.self[i].equiped = 1;
                             }
                         }
@@ -150,8 +195,8 @@ $(function () {
                 var _this = this;
                 requests.items.unequip(id, function (data) {
                     if (!data.error) {
-                        for(var i in _this.items.self){
-                            if(_this.items.self[i].id_i == id){
+                        for (var i in _this.items.self) {
+                            if (_this.items.self[i].id_i == id) {
                                 _this.items.self[i].equiped = 0;
                             }
                         }
@@ -162,8 +207,8 @@ $(function () {
                 var _this = this;
                 requests.spells.equip(id, function (data) {
                     if (!data.error) {
-                        for(var i in _this.spells.self){
-                            if(_this.spells.self[i].id_s == id){
+                        for (var i in _this.spells.self) {
+                            if (_this.spells.self[i].id_s == id) {
                                 _this.spells.self[i].equiped = 1;
                             }
                         }
@@ -174,8 +219,8 @@ $(function () {
                 var _this = this;
                 requests.spells.unequip(id, function (data) {
                     if (!data.error) {
-                        for(var i in _this.spells.self){
-                            if(_this.spells.self[i].id_s == id){
+                        for (var i in _this.spells.self) {
+                            if (_this.spells.self[i].id_s == id) {
                                 _this.spells.self[i].equiped = 0;
                             }
                         }
@@ -199,21 +244,44 @@ $(function () {
                         });
                     }
                 });
+            },
+            loadAll: function () {
+                var _this = this;
+                requests.users.self(function (data) {
+                    _this.self = data;
+                });
+
+                requests.items.self(function (data) {
+                    _this.items.self = data;
+                });
+
+                requests.spells.self(function (data) {
+                    _this.spells.self = data;
+                });
+
+                requests.users.ranking(0, 100, function(data){
+                    _this.ranking.players = data;
+                });
+            },
+            getProfile:function(login){
+                var _this = this;
+                requests.users.get(login, function(data){
+                    _this.profile = data;
+                    _this.show("profile");
+                });
+            },
+            show:function(id){
+                $("#"+id).show();
+            },
+            hide:function(id){
+                $("#"+id).hide();
             }
         },
         ready: function () {
-            var _this = this;
-            requests.users.self(function (data) {
-                _this.self = data;
-            });
+            this.loadAll();
 
-            requests.items.self(function (data) {
-                _this.items.self = data;
-            });
-
-            requests.spells.self(function (data) {
-                _this.spells.self = data;
-            });
+            this.hide("profile");
+            this.hide("ranking");
         }
     });
 });

@@ -9,6 +9,36 @@
 
 <body id="app">
 
+	<form @submit.prevent="connection()">
+		<input type="text" v-model="login.login" placeholder="Login">
+		<input type="password" v-model="login.password" placeholder="Password">
+		<input type="submit" value="Connexion">
+	</form>
+
+	<form @submit.prevent="registration()">
+		<input type="text" v-model="register.login" placeholder="Login">
+		<input type="password" v-model="register.password" placeholder="Password">
+		<input type="password" v-model="register.passwordconfirmation" placeholder="Password confirmation">
+		<input type="submit" value="Inscription">
+	</form>
+
+	<button @click="disconnect()">Deconnexion</button>
+
+	<div id="profile">
+		<button @click="hide('profile');">X</button>
+		<h1>Profile</h1>
+		{{profile.login}} - {{profile.elo}}
+	</div>
+
+	<div id="ranking">
+		<h1>Ranking</h1>
+		<ul>
+			<li v-for="player in ranking.players">
+				{{$index + 1}} -  : {{player.elo}} <button @click="getProfile(player.login)">{{player.login}}</button>
+			</li>
+		</ul>
+	</div>
+
 	<h1>{{self.login}} - {{self.elo}}</h1>
 	<h2>Golds : {{self.golds}} | Gems : {{self.gems}} </h2>
 

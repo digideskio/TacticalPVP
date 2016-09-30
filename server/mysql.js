@@ -38,6 +38,9 @@ module.exports = function (app) {
             },
             autocomplete: function(begin, callback){
                 db.query("SELECT * FROM users WHERE login like '"+begin+"%' ORDER BY elo DESC LIMIT 0, 10;", callback);
+            },
+            getRanking:function(min, max, callback){
+                db.query("SELECT * FROM users ORDER BY elo DESC LIMIT ?, ?;", [min, max], callback);
             }
         },
         items: {

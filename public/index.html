@@ -9,87 +9,93 @@
 
 <body id="app">
 
-	<form @submit.prevent="connection()">
-		<input type="text" v-model="login.login" placeholder="Login">
-		<input type="password" v-model="login.password" placeholder="Password">
-		<input type="submit" value="Connexion">
-	</form>
+	<div id="game">
 
-	<form @submit.prevent="registration()">
-		<input type="text" v-model="register.login" placeholder="Login">
-		<input type="password" v-model="register.password" placeholder="Password">
-		<input type="password" v-model="register.passwordconfirmation" placeholder="Password confirmation">
-		<input type="submit" value="Inscription">
-	</form>
+		<div id="login">
+			<form @submit.prevent="connection()">
+				<input type="text" v-model="login.login" placeholder="Login">
+				<input type="password" v-model="login.password" placeholder="Password">
+				<input type="submit" value="Connexion">
+			</form>
 
-	<button @click="disconnect()">Deconnexion</button>
+			<form @submit.prevent="registration()">
+				<input type="text" v-model="register.login" placeholder="Login">
+				<input type="password" v-model="register.password" placeholder="Password">
+				<input type="password" v-model="register.passwordconfirmation" placeholder="Password confirmation">
+				<input type="submit" value="Inscription">
+			</form>
+		</div>
 
-	<div id="profile">
-		<button @click="hide('profile');">X</button>
-		<h1>Profile</h1>
-		{{profile.login}} - {{profile.elo}}
-	</div>
+		<div id="home">
 
-	<div id="ranking">
-		<h1>Ranking</h1>
-		<ul>
-			<li v-for="player in ranking.players">
-				{{$index + 1}} -  : {{player.elo}} <button @click="getProfile(player.login)">{{player.login}}</button>
-			</li>
-		</ul>
-	</div>
+			<button @click="disconnect()">Deconnexion</button>
+			<h1>{{self.login}} - {{self.elo}}</h1>
+			<h2>Golds : {{self.golds}} | Gems : {{self.gems}} </h2>
 
-	<h1>{{self.login}} - {{self.elo}}</h1>
-	<h2>Golds : {{self.golds}} | Gems : {{self.gems}} </h2>
-
-	<h1>Items</h1>
-	<h2>Equiped - {{itemsLevel}}/{{items.maxlevel}}</h2>
-	<ul>
-		<li v-for="item in items.self | orderBy 'level'" v-if="item.equiped == 1">
-			<h2>{{item.name}} - {{item.level}} <button v-on:click="unequipItem(item.id_i)">Unequip</button></h2>
+			<h1>Items</h1>
+			<h2>Equiped - {{itemsLevel}}/{{items.maxlevel}}</h2>
 			<ul>
-				<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
+				<li v-for="item in items.self | orderBy 'level'" v-if="item.equiped == 1">
+					<h2>{{item.name}} - {{item.level}} <button v-on:click="unequipItem(item.id_i)">Unequip</button></h2>
+					<ul>
+						<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
+					</ul>
+				</li>
 			</ul>
-		</li>
-	</ul>
-	<h2>Unequiped</h2>
-	<ul>
-		<li v-for="item in items.self | orderBy 'level'" v-if="item.equiped == 0">
-			<h2>{{item.name}} - {{item.level}} <button v-if="itemsLevel + item.level <= items.maxlevel" v-on:click="equipItem(item.id_i)">Equip</button></h2>
+			<h2>Unequiped</h2>
 			<ul>
-				<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
+				<li v-for="item in items.self | orderBy 'level'" v-if="item.equiped == 0">
+					<h2>{{item.name}} - {{item.level}} <button v-if="itemsLevel + item.level <= items.maxlevel" v-on:click="equipItem(item.id_i)">Equip</button></h2>
+					<ul>
+						<li v-for="(charac, value) in item" v-if="items.CHARACTERISTICS[charac] != undefined && value != 0">{{charac}} : {{value}}</li>
+					</ul>
+				</li>
 			</ul>
-		</li>
-	</ul>
 
-	<h1>CHARACTERISTICS</h1>
-	<ul>
-		<li v-for="(charac, value) in characteristics" v-if="value != 0 && charac != 'erosion'">{{charac}} : {{value}}</li>
-	</ul>
+			<h1>CHARACTERISTICS</h1>
+			<ul>
+				<li v-for="(charac, value) in characteristics" v-if="value != 0 && charac != 'erosion'">{{charac}} : {{value}}</li>
+			</ul>
 
-	<h1>Spells - {{spellsLevel}}/{{spells.maxlevel}}</h1>
-	<h2>Equiped</h2>
-	<ul>
-		<li v-for="spell in spells.self | orderBy 'level'" v-if="spell.equiped == 1">
-			{{spell.name}} <button v-on:click="unequipSpell(spell.id_s)">Unequip</button>
-		</li>
-	</ul>
-	<h2>Unequiped</h2>
-	<ul>
-		<li v-for="spell in spells.self | orderBy 'level'" v-if="spell.equiped == 0">
-			{{spell.name}} <button v-if="spellsLevel + spell.level <= spells.maxlevel" v-on:click="equipSpell(spell.id_s)">Equip</button>
-		</li>
-	</ul>
+			<h1>Spells - {{spellsLevel}}/{{spells.maxlevel}}</h1>
+			<h2>Equiped</h2>
+			<ul>
+				<li v-for="spell in spells.self | orderBy 'level'" v-if="spell.equiped == 1">
+					{{spell.name}} <button v-on:click="unequipSpell(spell.id_s)">Unequip</button>
+				</li>
+			</ul>
+			<h2>Unequiped</h2>
+			<ul>
+				<li v-for="spell in spells.self | orderBy 'level'" v-if="spell.equiped == 0">
+					{{spell.name}} <button v-if="spellsLevel + spell.level <= spells.maxlevel" v-on:click="equipSpell(spell.id_s)">Equip</button>
+				</li>
+			</ul>
 
-	<h1>DROP !</h1>
-	<button v-on:click="dropping('golds')">DROP GOLDS ({{drop.DROP_GOLDS}}) golds</button>
-	<button v-on:click="dropping('gems')">DROP GEMS ({{drop.DROP_GEMS}}) gems</button>
+			<h1>DROP !</h1>
+			<button v-on:click="dropping('golds')">DROP GOLDS ({{drop.DROP_GOLDS}}) golds</button>
+			<button v-on:click="dropping('gems')">DROP GEMS ({{drop.DROP_GEMS}}) gems</button>
 
+			<button @click="matchmaking()">MatchMaking</button><br/>
+		<canvas id="canvas" width="800" height="800"></canvas>
+		<div id="turn"></div>
+		</div>
 
+		<div id="profile">
+			<button @click="hide('profile');">X</button>
+			<h1>Profile</h1>
+			{{profile.login}} - {{profile.elo}}
+		</div>
 
-	<button @click="matchmaking()">MatchMaking</button><br/>
-	<canvas id="canvas" width="800" height="800"></canvas>
-	<div id="turn"></div>
+		<div id="ranking">
+			<button @click="hide('ranking');">X</button>
+			<h1>Ranking</h1>
+			<ul>
+				<li v-for="player in ranking.players">
+					{{$index + 1}} - : {{player.elo}} <button @click="getProfile(player.login)">{{player.login}}</button>
+				</li>
+			</ul>
+		</div>
+	</div>
 
 	<script src="./js/lib/jquery-2.2.4.min.js"></script>
 	<script src="./js/lib/vue.min.js"></script>

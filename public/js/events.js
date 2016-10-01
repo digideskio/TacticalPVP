@@ -275,13 +275,15 @@ $(function () {
             },
             hide:function(id){
                 $("#"+id).hide();
+            },
+            matchmaking:function(){
+                socket.emit("matchmaking");
             }
         },
         ready: function () {
             this.loadAll();
 
-            this.hide("profile");
-            this.hide("ranking");
+           this.show("login");
         }
     });
 });

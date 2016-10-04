@@ -11,9 +11,6 @@ Client.prototype.init = function(json){
 }
 
 Client.prototype.update = function(){
-	if(this.room){
-		
-	}
 }
 
 Client.prototype.click = function(x, y){

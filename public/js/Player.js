@@ -135,67 +135,46 @@ Player.prototype.updateCharacteristics = function(){
 	}
 }
 
-Player.prototype.addSpell = function(spell){
-	if(this.fighting){
-		return;
+Player.prototype.getMovePossibilities = function(){
+	var _this = this;
+
+	var getNeighborsCells = function(x, y){
+		var cells = [];
+		for(var i = x - 1; i <= x + 1; i++){
+			for(var j = y - 1; j <= y + 1; j++){
+				if(Math.abs(x - i + y - j) != 1){
+					continue;
+				}
+				if(i < 0 || j < 0 || i >= _this.room.map.tiles.length || j >= _this.room.map.tiles[0].length){
+					continue;
+				}
+				cells.push({x:i, y:j});
+			}
+		}
+		return cells;
 	}
 
-	var found = false;
+	var obstacles = _this.room.getAllObstacles();
 
-	for(var i in this.spells){
-		if(this.spells[i].id == spell.id){
-			found = true;
-			break;
+	var cells = {};
+	var mp = this.characteristics.MP || 0;
+
+	var list = {};
+	list[this.x+"-"+this.y] = true;
+
+	while(Object.keys(list).length > 0){
+		for(var i in list){
+			var positions = i.split("-");
+			var neighbors = getNeighborsCells(positions[0], positions[1]);
+			for(var neighbor of neighbors){
+				
+			}
 		}
 	}
 
-	if(!found){
-		this.spells.push(spell);
-	}
+	return cells;
 }
 
-Player.prototype.removeSpell = function(spell){
-	if(this.fighting){
-		return;
-	}
-
-	for(var i in this.spells){
-		if(this.spells[i].id == spell.id){
-			this.spells.splice(i, 1);
-		}
-	}
-}
-
-Player.prototype.addItem = function(item){
-	if(!this.fighting || this.room == null){
-		return;
-	}
-
-	var found = false;
-
-	for(var i in this.items){
-		if(this.items[i].id == item.id){
-			found = true;
-			break;
-		}
-	}
-
-	if(!found){
-		this.items.push(item);
-	}
-}
-
-Player.prototype.removeItem = function(item){
-	if(this.fighting){
-		return;
-	}
-	
-	for(var i in this.items){
-		if(this.items[i].id == item.id){
-			this.items.splice(i, 1);
-		}
-	}
-}
 
 Player.prototype.getPublicInformations = function(){
 	var stats = JSON.parse(JSON.stringify(this.characteristics));

@@ -14,6 +14,7 @@ Display.prototype.render = function () {
 		return;
 	}
 
+
 	var tiles = this.client.room.map.tiles;
 	this.tilesize = this.canvas.width / tiles.length;
 	for (var x in tiles) {

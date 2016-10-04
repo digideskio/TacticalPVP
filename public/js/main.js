@@ -7,8 +7,9 @@ $(function () {
 
 	var update = function () {
 		client.display.render();
+		requestAnimationFrame(update);
 	}
-	requestAnimationFrame(update);
+	update();
 
 	$("#canvas").click(function (e) {
 		var x = e.pageX - $(this).offset().left;

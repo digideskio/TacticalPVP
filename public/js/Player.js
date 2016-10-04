@@ -135,14 +135,21 @@ Player.prototype.updateCharacteristics = function(){
 	}
 }
 
-Player.prototype.getMovePossibilities = function(){
+
+Player.prototype.getDodgeProbability = function(unit){
+	var pDodge = this.characteristics.dodge || 0;
+	var uLock = unit.characteristics.lock || 0;
+	return (pDodge + 2) / (2 * (uLock + 2));
+}
+
+Player.prototype.getMoves = function(){
 	var _this = this;
 
 	var getNeighborsCells = function(x, y){
 		var cells = [];
 		for(var i = x - 1; i <= x + 1; i++){
 			for(var j = y - 1; j <= y + 1; j++){
-				if(Math.abs(x - i + y - j) != 1){
+				if(Math.abs(x - i) + Math.abs(y - j) != 1){
 					continue;
 				}
 				if(i < 0 || j < 0 || i >= _this.room.map.tiles.length || j >= _this.room.map.tiles[0].length){
@@ -160,18 +167,30 @@ Player.prototype.getMovePossibilities = function(){
 	var mp = this.characteristics.MP || 0;
 
 	var list = {};
-	list[this.x+"-"+this.y] = true;
+	list[this.x+"-"+this.y] = {distance:0};
 
 	while(Object.keys(list).length > 0){
 		for(var i in list){
 			var positions = i.split("-");
 			var neighbors = getNeighborsCells(positions[0], positions[1]);
 			for(var neighbor of neighbors){
-				
+				if(list[i].distance+1 > mp){
+					continue;
+				}
+
+				if(obstacles[neighbor.x][neighbor.y].type != 0 || obstacles[neighbor.x][neighbor.y].unit){
+					continue;
+				}
+
+				if(!cells[neighbor.x+"-"+neighbor.y]){
+					cells[neighbor.x+"-"+neighbor.y] = {fathers:[], x:neighbor.x, y:neighbor.y};
+					list[neighbor.x+"-"+neighbor.y] = {distance:list[i].distance+1};
+				}
+				cells[neighbor.x+"-"+neighbor.y].fathers.push({cell:i, distance:list[i].distance+1});
 			}
+			delete list[i];
 		}
 	}
-
 	return cells;
 }
 

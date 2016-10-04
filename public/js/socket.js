@@ -12,6 +12,10 @@ $(function(){
 	socket.on("init", function(data){
 		data.timeleft += Date.now();
 		var room = new Room(data);
+		for(var i in room.units){
+			room.units[i] = new Player(room.units[i]);
+			room.units[i].room = room;
+		}
 		client.room = room;
 		console.log(data);
 	});

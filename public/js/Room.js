@@ -33,7 +33,7 @@ Room.prototype.start = function(){
 
 	this.initPlayersPlacement();
 
-	var cdPlacement = 30 * 1000;
+	var cdPlacement = 1 * 1000;
 	this.timeleft = cdPlacement + Date.now();
 
 	var _this = this;
@@ -163,10 +163,10 @@ Room.prototype.initPlayersPlacement = function(){
 
 Room.prototype.getAllObstacles = function(){
 	var map = [];
-	for(var x in that.map.tiles){
+	for(var x in this.map.tiles){
 		map[x] = [];
-		for(var y in that.map.tiles[x]){
-			var cell = that.map.tiles[x][y];
+		for(var y in this.map.tiles[x]){
+			var cell = this.map.tiles[x][y];
 			map[x][y] = cell;
 		}
 	}

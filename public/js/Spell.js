@@ -61,32 +61,6 @@ Spell.prototype.use = function(room, player, x, y){
 }
 
 Spell.prototype.exec = function(room, player, x, y){
-	var ME = player;
-
-	var RANDOM = function(min, max){
-		return Math.floor(Math.random() * (max - min + 1) + min);
-	}
-
-	var AOEPLAYERS = function(){
-
-	}
-
-	var IS_ALLY = function(PLAYER){
-		if(PLAYER.team == ME.team){
-			return true;
-		}
-		return false;
-	}
-	var IS_ME = function(PLAYER){
-		if(ME.id == PLAYER.id){
-			return true;
-		}
-		return false;
-	}
-	
-
-
-	////END FUNCTIONS
 	eval(this.effect);
 }
 

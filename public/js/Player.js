@@ -78,15 +78,49 @@ Player.prototype.move = function(position){
 		}
 	}
 
-	this.x = position[position.length - 1].x;
-	this.y = position[position.length - 1].y;
+	var path = [];
 
-	this.characteristics.MP -= position.length;
+	var dx = this.x;
+	var dy = this.y;
 
-	for(var i in this.room.players){
-		Utils.msgTo(this.room.players[i].socket, "placement", [{id:this.id, x:this.x, y:this.y}]);
+	for(var i in position){
+		var neighbors = this.room.map.getNeighborsCells(dx, dy);
+		var proba = [];
+		for(var cell of neighbors){
+			if(cell.unit && cell.unit.team != this.team){
+				proba.push(this.getDodgeProbability(cell.unit));
+			}
+		}
+
+		var APLoss = 0;
+		var MPLoss = 0;
+
+		if(proba.length > 0){
+			var probaproduct = proba.reduce(function(a,b){return a*b});
+			APLoss = Math.ceil(1 - this.characteristics.AP * probaproduct); 
+			MPLoss = Math.ceil(1 - this.characteristics.MP * probaproduct); 
+		}
+
+		this.characteristics.AP -= APLoss;
+		this.characteristics.MP -= 1;
+		this.characteristics.MP -= MPLoss;
+
+		if(this.characteristics.MP <= 0){
+			continue;
+		}
+
+		dx = position[i].x;
+		dy = position[i].y;
+
+		path.push({x:dx, y:dy, APLoss:APLoss, MPLoss:MPLoss});
 	}
 
+	this.x = dx;
+	this.y = dy;
+
+	for(var i in this.room.players){
+		Utils.msgTo(this.room.players[i].socket, "move", [{id:this.id, path:path}]);
+	}
 }
 
 Player.prototype.placement = function(x, y){
@@ -144,23 +178,7 @@ Player.prototype.getDodgeProbability = function(unit){
 
 Player.prototype.getMoves = function(){
 	var _this = this;
-
-	var getNeighborsCells = function(x, y){
-		var cells = [];
-		for(var i = x - 1; i <= x + 1; i++){
-			for(var j = y - 1; j <= y + 1; j++){
-				if(Math.abs(x - i) + Math.abs(y - j) != 1){
-					continue;
-				}
-				if(i < 0 || j < 0 || i >= _this.room.map.tiles.length || j >= _this.room.map.tiles[0].length){
-					continue;
-				}
-				cells.push({x:i, y:j});
-			}
-		}
-		return cells;
-	}
-
+	
 	var obstacles = _this.room.getAllObstacles();
 
 	var cells = {};
@@ -172,7 +190,7 @@ Player.prototype.getMoves = function(){
 	while(Object.keys(list).length > 0){
 		for(var i in list){
 			var positions = i.split("-");
-			var neighbors = getNeighborsCells(positions[0], positions[1]);
+			var neighbors = _this.room.map.getNeighborsCells(positions[0], positions[1]);
 			for(var neighbor of neighbors){
 				if(list[i].distance+1 > mp){
 					continue;

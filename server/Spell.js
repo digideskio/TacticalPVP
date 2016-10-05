@@ -18,3 +18,9 @@ SPELL.DAMAGE_PLAYER = function(player, damage){
     return (1 - resistance / 100) * (damage - damresistance);
 }
 
+SPELL.GET_HEAL = function(player, jet){
+    var heal = player.characteristics.heal || 0;
+    var damheal = player.characteristics.damheal || 0;
+
+    return Math.floor(jet * (100 + heal) /100 + damheal);
+}

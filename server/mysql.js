@@ -10,8 +10,13 @@ module.exports = function (app) {
             process.exit();
         } else {
             console.log("Database : OK");
+            setInterval(function () {
+                db.query('SELECT 1');
+            }, 5000);
         }
     });
+
+
 
     return {
         getDB: function () {
@@ -36,10 +41,10 @@ module.exports = function (app) {
             updateUser: function (datas, id, callback) {
                 db.query("UPDATE users SET ? WHERE ?", [datas, { id_u: id }], callback);
             },
-            autocomplete: function(begin, callback){
-                db.query("SELECT * FROM users WHERE login like '"+begin+"%' ORDER BY elo DESC LIMIT 0, 10;", callback);
+            autocomplete: function (begin, callback) {
+                db.query("SELECT * FROM users WHERE login like '" + begin + "%' ORDER BY elo DESC LIMIT 0, 10;", callback);
             },
-            getRanking:function(min, max, callback){
+            getRanking: function (min, max, callback) {
                 db.query("SELECT * FROM users ORDER BY elo DESC LIMIT ?, ?;", [min, max], callback);
             }
         },
